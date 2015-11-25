@@ -1,4 +1,4 @@
-# POC # 
+# Prueba de Concepto de explotación de BAComoLLego  
 
 ## Requerimientos ##
 
