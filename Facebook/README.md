@@ -42,15 +42,15 @@ The application embeds a generic HTTP server component that is used as a caching
 
 
 ## 4. Disclosure of private video content in Facebook application for Android
-[[http://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-NNNNX](http://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-NNNNX)]
-The application allows users to upload video to Facebook and configure who should be able to play it back (publicly accessible, friends only, oneself, custom list). The application also allows users to playback video on the Android device. Viewing video content marked by the user as private is prevented by Facebook in accordance to the company's privacy policy [2]f the connecting client is a web browser. However, if the user connects to Facebook using the Android application the confidentiality of private video and audio content is not enforced.
+[[http://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-NNNNX](http://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-NNNNX)] 
+The application allows users to upload video to Facebook and configure who should be able to play it back (publicly accessible, friends only, oneself, custom list). The application also allows users to playback video on the Android device. Viewing video content marked by the user as private is prevented by Facebook in accordance to the company's privacy policy [2] if the connecting client is a web browser. However, if the user connects to Facebook using the Android application the confidentiality of private video and audio content is not enforced.
 
  The application retrieves video content for playback in an insecure manner, allowing anyone with access to the same network where the Android device is connected or to any network in the path between the device and Facebook's Content Delivery Network to capture or retrieve video content disregarding the user's configured access policy and bypassing Facebook's privacy policy.
 
 
 ## 5. Disclosure of audio recordings in chat messages in Facebook and Facebook Messenger for Android
 [[http://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-NNNNY](http://cve.mitre.org/cgi-bin/cvename.cgi?name=2014-NNNNY)]
-The Facebook Messenger application is also among the top 10 most installed Android applications worldwide with 500 to 1000 million installs [4]. Both Facebook and Facebook Messenger applications allow users to send and playback audio recordings as messages within a chat session. Transmission of the audio content is done using an insecure network protocol, allowing anyone with access to the same network where the Android device is connected or to any network in the path between the device and Facebook's Content Delivery Network to capture or retrieve chat audio recordings bypassing Facebook's privacy policy.  
+The Facebook Messenger application is also among the top 10 most installed Android applications worldwide with 500 to 1000 million installs [4] . Both Facebook and Facebook Messenger applications allow users to send and playback audio recordings as messages within a chat session. Transmission of the audio content is done using an insecure network protocol, allowing anyone with access to the same network where the Android device is connected or to any network in the path between the device and Facebook's Content Delivery Network to capture or retrieve chat audio recordings bypassing Facebook's privacy policy.  
 
 
 ## 6. Video Cache Server vulnerability: Vulnerable packages
@@ -67,10 +67,10 @@ The Facebook Messenger application is also among the top 10 most installed Andro
 * Facebook Messenger Android application older than version 5.0.0.25.1
 
 ## 9. Vendor Information, Solutions and Workarounds
-
+ 
 Facebook acknowledged and corrected all three vulnerabilities. According to the company, the audio recording issue was already known and a fix was being beta tested at the time the bug was originally reported. The company released new application updates that fix both audio and video vulnerabilities.
 The fix to the disclosure of audio recordings required a new application update. The fix to the video disclosure vulnerability works with current and prior versions of the application that support retrieval of video from the CDN using HTTPS.
-
+ 
 Facebook's new update to version 13.0.0.13.14 fixed the open proxy issue by configuring the video cache server to listen only to local requests.
 
 To determine which version of the applications you have installed on your Android device, go to "Settings|application settings|manage application" then tap on the Facebook or Facebook Messenger app.
@@ -84,23 +84,23 @@ The publication of this advisory was coordinated by Programa Seguridad en TIC.
 
 ## 11. Technical Description
 
-Facebook uses an HTTP server as caching proxy for media content. The server is hosted in the mobile application's process space and listens on a local non-fixed ephemeral TCP port. The constructor of the class _com.facebook.video.server.VideoServerBase_mbedded in the Facebook application instantiates this GenericHttpServer object. The created instance listens to requests from any client, local or remote, enabling an attacker to perform requests to third party servers through it.
-
-The server accepts three types of GET requests: _/proxy_, _/cache-window_and _/cache-thru_. The parameters for these requests are _'remote-uri'_hose value is an URL and a _'vid'_dentifier. Upon receiving a request, the server performs a HEAD request to the _'remote-uri' _URL to obtain the _content-length_of the resource, it then obtains the requested resource with a series of GET requests until the previously declared content-length is reached. Any redirect response to the HEAD request is followed by a GET request to the redirected location.
-
+Facebook uses an HTTP server as caching proxy for media content. The server is hosted in the mobile application's process space and listens on a local non-fixed ephemeral TCP port. The constructor of the class _com.facebook.video.server.VideoServerBase_ embedded in the Facebook application instantiates this GenericHttpServer object. The created instance listens to requests from any client, local or remote, enabling an attacker to perform requests to third party servers through it.
+ 
+The server accepts three types of GET requests: _/proxy_, _/cache-window_ and _/cache-thru_. The parameters for these requests are _'remote-uri'_ whose value is an URL and a _'vid'_ identifier. Upon receiving a request, the server performs a HEAD request to the _'remote-uri' _ URL to obtain the _content-length_ of the resource, it then obtains the requested resource with a series of GET requests until the previously declared content-length is reached. Any redirect response to the HEAD request is followed by a GET request to the redirected location.
+ 
 While the 'proxy' request will simply forward the content to the server's client, the 'cache-thru' and 'cache-window' requests indicate the server to not only forward the content to the client but also to store a copy on the phone internal memory under _data/data/com.facebook.katana/files/video-cache_. 
 
-An attacker could use a victim's mobile with the Facebook app installed as an open proxy by querying the embedded HTTP server for _/proxy_and passing as a parameter a shortened URL that points to any arbitrarily selected target site. Since all redirects are followed, an attacker could use a shortened URL, obtained from a site like _goo.gl_, as the target site parameter so the proxy works on all sites. She can also cause the phone to run out of internal storage by simply querying _/cache-thru_th a _'remote-uri'_set to a site containing a large file. The same can be done for running up the subscriber's data transfer limit over 3G, LTE networks.  
+An attacker could use a victim's mobile with the Facebook app installed as an open proxy by querying the embedded HTTP server for _/proxy_ and passing as a parameter a shortened URL that points to any arbitrarily selected target site. Since all redirects are followed, an attacker could use a shortened URL, obtained from a site like _goo.gl_, as the target site parameter so the proxy works on all sites. She can also cause the phone to run out of internal storage by simply querying _/cache-thru_ with a _'remote-uri'_ set to a site containing a large file. The same can be done for running up the subscriber's data transfer limit over 3G, LTE networks.  
 
 To reproduce the vulnerability follow these steps:
 
 1) Connect with adb shell to a device running Facebook and run netstat to find out the listening port
 
-2) From a device in the same network run _telnet [Phone IP] [listening port]_and enter the following request:
+2) From a device in the same network run _telnet [Phone IP] [listening port]_ and enter the following request:
 
 _GET /cache-thru?remote-uri=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dz9Uz1icjwrM&vid=a HTTP/1.1_
 3) The phone queries the link with a HEAD request which youtube servers will respond with a 302 redirect to _m.youtube.com_. The victim then queries m.youtube.com and downloads the video content to the phone's internal memory cache and forwards it to the client that requested it over the telnet connection.
-
+  
 Videos hosted on the Facebook CDN network are obtained via HTTP. When a user requests playback of a video hosted on Facebook an instance of the VideoServerBase class performs a request to an instance of the GenericHTTPServer class with a parameter of /caching-thru with its value set to the URI of the video to retrieve from the CDN. Since the URI scheme is HTTP, the caching proxy requests to download the content are performed over an insecure transport.    
 
 Anyone with access to the local network of the Android device or to any network in the path between the device and Facebook's CDN can obtain the URL and video content by capturing network packets or can retrieve the video content directly from Facebook's CDN once the URL is known.
@@ -121,11 +121,11 @@ Steps to reproduce the vulnerability:
 
 7) Copy the URL in the GET request obtained from the proxy (this emulates an attacker sniffing the network) and paste it in a web browser to watch the video without any authentication.
 
-The third vulnerability involves audio recordings sent from one Facebook user to another user through chat on both Facebook and Facebook Messenger applications. The sender's application uploads the audio recording using an HTTPS POST request to _graph.facebook.com_and then a HTPPS GET request to _api.facebook.com/method/messaging.getAttachment_that is responded with a redirect to the actual content at _attachment.fbsbx.com_. Although the initial POST and GET requests are sent over HTTPS and authenticated using the user's OAuth access token, the redirect response to retrieve the audio content is obtained over HTTP. Likewise, the receiver's application downloads the audio recording using an HTTPS GET request to _api.facebook.com/method/getAttachment_that is responded with a redirect with a URL to the actual audio content on _attachment.fbsbx.com_over HTTP. The uid parameter in both requests indicate the Facebook IDs of sender and receiver, respectively.
+The third vulnerability involves audio recordings sent from one Facebook user to another user through chat on both Facebook and Facebook Messenger applications. The sender's application uploads the audio recording using an HTTPS POST request to _graph.facebook.com_ and then a HTPPS GET request to _api.facebook.com/method/messaging.getAttachment_ that is responded with a redirect to the actual content at _attachment.fbsbx.com_. Although the initial POST and GET requests are sent over HTTPS and authenticated using the user's OAuth access token, the redirect response to retrieve the audio content is obtained over HTTP. Likewise, the receiver's application downloads the audio recording using an HTTPS GET request to _api.facebook.com/method/getAttachment_ that is responded with a redirect with a URL to the actual audio content on _attachment.fbsbx.com_ over HTTP. The uid parameter in both requests indicate the Facebook IDs of sender and receiver, respectively.
 
-This vulnerability was found in the _com.facebook.ui.media.fetch.MediaRedirectHandler_class in method _getLocationURI_packages previous to version 10.0.28.27 . This method calls a private method that translates the URI scheme from HTTPS to HTTP for any request redirected to domain _attachment.fbsbx.com_.
+This vulnerability was found in the _com.facebook.ui.media.fetch.MediaRedirectHandler_ class in method _getLocationURI_ in packages previous to version 10.0.28.27 . This method calls a private method that translates the URI scheme from HTTPS to HTTP for any request redirected to domain _attachment.fbsbx.com_.
 
-As a result of the above, an attacker access to the same network where the Android device is connected or to any network in the path between the device and the _attachment.fbsbx.com_twork can capture or retrieve chat audio recordings bypassing Facebook's privacy policy.   
+As a result of the above, an attacker access to the same network where the Android device is connected or to any network in the path between the device and the _attachment.fbsbx.com_ network can capture or retrieve chat audio recordings bypassing Facebook's privacy policy.   
 
 Steps to reproduce the disclosure of audio recordings vulnerability
 
@@ -135,7 +135,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
 
 3) Within the Facebook app open a chat window and send a recording.
 
-4) Find the GET request to _attachment.fbsbx.com_the captured traffic. Use any web browser to open the specified URL to obtain the recording.
+4) Find the GET request to _attachment.fbsbx.com_ in the captured traffic. Use any web browser to open the specified URL to obtain the recording.
 
 
 ## 12. Report Timeline
@@ -153,15 +153,15 @@ Steps to reproduce the disclosure of audio recordings vulnerability
           The researcher sent the requested information to the vendor.
         
 * **2014-05-29:** 
-          The researcher requested an status update and informed the vendor that the Programa Seguridad en TICplan to release a security advisory to notify affected users about the issues and provide guidance to apply fixes. He asked the vendor to continue the communication over email rather than using Facebook's vulnerability reporting system since the latter requires researcher and coordinator to have a Facebook account.
+          The researcher requested an status update and informed the vendor that the Programa Seguridad en TIC plan to release a security advisory to notify affected users about the issues and provide guidance to apply fixes. He asked the vendor to continue the communication over email rather than using Facebook's vulnerability reporting system since the latter requires researcher and coordinator to have a Facebook account.
         
 * **2014-06-04:** 
-          Facebook communicated with Programa Seguridad en TICvia email. Programa Seguridad en TICset June 18th as publication date for the security advisory and indicated that there is evidence of very similar vulnerabilities being actively exploited by third parties to collect media content deemed private by Facebook users.
+          Facebook communicated with Programa Seguridad en TIC  via email. Programa Seguridad en TIC set June 18th as publication date for the security advisory and indicated that there is evidence of very similar vulnerabilities being actively exploited by third parties to collect media content deemed private by Facebook users.
         
 * **2014-06-05:** 
           Facebook asked for evidence of active exploitation and assured that a fix for the recording vulnerability was already being rolled out before the report was sent.
         
-* **2014-06-06:** Programa Seguridad en TICsend a reference [5]to NSA presentation slides 82-87 leaked by Glenn Greenwald about network traffic capture activities to obtain Facebook images hosted in Akamai servers.
+* **2014-06-06:** Programa Seguridad en TIC send a reference [5] to NSA presentation slides 82-87 leaked by Glenn Greenwald about network traffic capture activities to obtain Facebook images hosted in Akamai servers.
         
 * **2014-06-12:** 
           A new update for the Facebook application was released. The researcher analyzed the new application and found that vulnerabilities 2 and 3 were fixed.
@@ -170,7 +170,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
           Facebook informed the researcher that the video and audio vulnerabilities had been patched and asked for the researcher's confirmation.
         
 * **2014-06-16:** 
-          The researcher acknowledged that both vulnerabilities were fixed. Programa Seguridad en TICAsked about the open proxy pending issue. 
+          The researcher acknowledged that both vulnerabilities were fixed. Programa Seguridad en TIC Asked about the open proxy pending issue. 
         
 * **2014-06-16:** 
           Facebook requests proof-of-concept code or steps to reproduce the open proxy issue. 
@@ -184,7 +184,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
 * **2014-06-20:** 
            Response from Mitre saying none of the two vulnerabilities meet the CVE inclusion criteria and therefore CVE identifiers will not be assigned.           
         
-* **2014-06-22:** Programa Seguridad en TICasks for an update about the open proxy issue. 
+* **2014-06-22:** Programa Seguridad en TIC asks for an update about the open proxy issue. 
         
 * **2014-06-23:** 
           Reply from Facebook security saying its working with the team and will be in touch when there is information to share.
@@ -195,7 +195,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
 * **2014-07-01:** 
           Facebook sent a new confirmation of working on the fix for open proxy issue.
         
-* **2014-07-02:** Programa Seguridad en TICxpressed to Facebook its concern about elapsed time since the original report and asked why a simple fix is taking so long.
+* **2014-07-02:** Programa Seguridad en TIC expressed to Facebook its concern about elapsed time since the original report and asked why a simple fix is taking so long.
         
 * **2014-07-02:** 
           Facebook replied that it is actively working on addressing the issue.
@@ -204,7 +204,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
            Email to Mitre asking if they have a decision on use of CVE identifiers in light of the additional details about the vulnerabilities provided in the previous email.
         
 * **2014-07-08:** 
-          The researcher reminded Facebook that the advisory was originally scheduled for publication on June 18 and that no estimated date for the fix to open proxy issue was provided, so a new publication date was set for July 16, 2014 and should be considered final. Programa Seguridad en TICremains willing to move the date on basis of receiving concrete and detailed information about plans to fix the open proxy issue.
+          The researcher reminded Facebook that the advisory was originally scheduled for publication on June 18 and that no estimated date for the fix to open proxy issue was provided, so a new publication date was set for July 16, 2014 and should be considered final. Programa Seguridad en TIC remains willing to move the date on basis of receiving concrete and detailed information about plans to fix the open proxy issue.
         
 * **2014-07-08:** 
            Email to Mitre asking again for a response to the request for CVE identifiers.
@@ -212,7 +212,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
 * **2014-07-09:** 
           Facebook asked to hold off the publication a week further, assuring that the fix would be up by then. 
         
-* **2014-07-11:** Programa Seguridad en TICmoved the release date to July 23, 2014 as the final date. 
+* **2014-07-11:** Programa Seguridad en TIC moved the release date to July 23, 2014 as the final date. 
         
 * **2014-07-11:** 
          Facebook informed that the patch was already released in the beta version of Android. 
@@ -235,7 +235,7 @@ Steps to reproduce the disclosure of audio recordings vulnerability
 * **2014-07-21:** 
           The vendor informed that the update was available to 100 % of the users.
         
-* **2014-07-22:** Programa Seguridad en TICasked if the figures provided by Facebook correspond to availability or actual installations of the update.
+* **2014-07-22:** Programa Seguridad en TIC asked if the figures provided by Facebook correspond to availability or actual installations of the update.
         
 * **2014-07-22:** 
           The vendor replied that percentage figures correspond to availability not actual installations.
@@ -264,5 +264,5 @@ For more information visit: https://www.fundacionsadosky.org.ar
 
 ## 15. Copyright Notice
 
-The contents of this advisory are copyright  (c)2014 Fundación Sadosky and are licensed under a Creative Commons Attribution Non-Commercial Share-Alike 4.0 License:
+The contents of this advisory are copyright  (c) 2014 Fundación Sadosky and are licensed under a Creative Commons Attribution Non-Commercial Share-Alike 4.0 License:
 [http://creativecommons.org/licenses/by-nc-sa/4.0/](http://creativecommons.org/licenses/by-nc-sa/4.0/)

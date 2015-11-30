@@ -35,10 +35,10 @@
 
 
 ## 3. Vulnerability Description
-
+ 
 PicsArt Photo Studio is a free and full featured photo-editing and drawing mobile app available on Android, iOS and Windows Phone. As of October, 2014 the Android version of the app had between 100 and 500 million downloads from the Google Play store. According to the vendor the app has been installed more than 175 million times, has a 7 million monthly growth and more than 45 million monthly active users[1]. Users can take, edit, publish and share photos on the PicsArt website and on popular social networks such as Facebook, Twitter and Google+ directly from the mobile app.
-
-Originally the PicsArt application for Android[2]did not use HTTPS to send security-sensitve information to the servers, allowing attackers to hijack PicsArt user accounts simply by capturing network traffic. After our original report to the vendor in May 2014, the app started using HTTPS but it does not validate the server's SSL certificate, allowing an attacker to perform Man-In-The-Middle attacks. PicsArt user accounts can still be hijacked by capturing the user id sent as value of the _key_parameter in certain HTTPS GET requests.
+       
+Originally the PicsArt application for Android[2] did not use HTTPS to send security-sensitve information to the servers, allowing attackers to hijack PicsArt user accounts simply by capturing network traffic. After our original report to the vendor in May 2014, the app started using HTTPS but it does not validate the server's SSL certificate, allowing an attacker to perform Man-In-The-Middle attacks. PicsArt user accounts can still be hijacked by capturing the user id sent as value of the _key_ parameter in certain HTTPS GET requests.
 
 Additionally, a user can sign up to PicsArt using her Facebook, Twitter or Google+ account or using a standard email and password scheme. When the user signs up using a third party social network account, the user ID and access token obtained from those social networks are sent to the PicsArt servers to identify the user during the login phase. 
 
@@ -68,16 +68,16 @@ Will Dormann of CERT/CC independently discovered the SSL certificate validation 
 
 ## 7. Technical Description
 
-A user can sign up to PicsArt using her Facebook[3], Twitter[4]or Google+ account or using a standard email and password scheme.
+A user can sign up to PicsArt using her Facebook[3], Twitter[4] or Google+ account or using a standard email and password scheme.
 When a user signs using a social network, the PicsArt application uses the OAuth protocol to communicate with that site.
 If the user authorizes it, the PicSart application is provided with an access token from either Facebook, Twitter or Google+ that can be used to retrieve personal information or perform actions on behalf of that user.
-
-The application then uploads the access token to the PicsArt servers along with the ID of that user so that the server can create a new account associated to the user. Up to PicsArt version 4.2.2, this communication was done entirely over HTTP. An attacker capturing the request to _http://api.picsart.com/users/signin.json_could retrieve the access token of Facebook, Twittter and Google+ as well as hijack the session token of PicsArt for that user. After our report to PicsArt, use of HTTPS was introduced by the vendor in version 4.6.3 in an attempt to prevent man-in-the-middle attacks as well as session hijacking. Unfortunately, adoption of HTTPS did not fix the problems.  
-
-In version of the PicsArt Photo Studio app that use HTTPS, the socket object used to perform the secure connection uses a custom X509TrustManager. The TrustManager's task is to check the certificate presented by the server in order to prevent Man-in-the-Middle attacks. The class _com.socialin.android.util.w_sets the default SSLsocketFactory used in the application to an empty TrustManager and the default HostnameVerifier to a dummy one. Because of that, any certificate presented by the server will be considered valid. This allows an attacker to mount a MITM attack intercepting traffic, creating fake X509 certificates on the fly and submitting them to PicsArt's Android application. 
-
-Moreover, up to version 4.6.3 some requests performed by the application were still obtained using HTTP. For example, when a user opens the application, a request over HTTP to _https://api.picsart.com/users/show/me.json_to obtain user information. Since requests that contains the user key as a parameter like this are being sent to the server, session hijacking is possible by simply capturing traffic. This was fixed in the version 4.6.3.
-
+ 
+The application then uploads the access token to the PicsArt servers along with the ID of that user so that the server can create a new account associated to the user. Up to PicsArt version 4.2.2, this communication was done entirely over HTTP. An attacker capturing the request to _http://api.picsart.com/users/signin.json_ could retrieve the access token of Facebook, Twittter and Google+ as well as hijack the session token of PicsArt for that user. After our report to PicsArt, use of HTTPS was introduced by the vendor in version 4.6.3 in an attempt to prevent man-in-the-middle attacks as well as session hijacking. Unfortunately, adoption of HTTPS did not fix the problems.  
+  
+In version of the PicsArt Photo Studio app that use HTTPS, the socket object used to perform the secure connection uses a custom X509TrustManager. The TrustManager's task is to check the certificate presented by the server in order to prevent Man-in-the-Middle attacks. The class _com.socialin.android.util.w_ sets the default SSLsocketFactory used in the application to an empty TrustManager and the default HostnameVerifier to a dummy one. Because of that, any certificate presented by the server will be considered valid. This allows an attacker to mount a MITM attack intercepting traffic, creating fake X509 certificates on the fly and submitting them to PicsArt's Android application. 
+  
+Moreover, up to version 4.6.3 some requests performed by the application were still obtained using HTTP. For example, when a user opens the application, a request over HTTP to _https://api.picsart.com/users/show/me.json_ to obtain user information. Since requests that contains the user key as a parameter like this are being sent to the server, session hijacking is possible by simply capturing traffic. This was fixed in the version 4.6.3.
+  
 Additional problems were found by inspecting how the PicsArt Photo Studio app uses the server API. When a user logs in with a social network account using the Android appliction, a HTTP POST request containing the user's access token and other information such as his name, user name, mail and a user identifier for the social network is sent to the PicsArt servers. The server API doesn't verify whether the access token provided is valid for an already created account and responds with the user key associated to the provided social network ID. This allows an attacker to obtain access to other user's PicsArt account by just knowing their user name on third party social networks.
 
 An attacker can also obtain the user's access tokens to third party social networks linked  to their profile by requesting the user's profile information using the key provided in the previosuly described step. For example, if a user's has her Twitter account linked to her PicsArt account, the server's response to the profile information will contain the user's OAUTH_TOKEN and OAUTH_TOKEN_SECRET for Twitter. 
@@ -144,31 +144,31 @@ A sample proof-of-concept script to demonstrates that knowing only a PicsArt use
 
 ## 8. Report Timeline
 
-* **2014-05-05:** Programa de Seguridad en TICsent the vendor a description of the vulnerabilities found: the improper server validation of access tokens and the use of unencrypted HTTP communication with the server. 
+* **2014-05-05:** Programa de Seguridad en TIC sent the vendor a description of the vulnerabilities found: the improper server validation of access tokens and the use of unencrypted HTTP communication with the server. 
         
 * **2014-05-07:** 
           PicsArt indicated that the problems where already known and that due to previous technical problems the application had switched temporary to HTTP but that the new release, 4.2.2, HTTPS would be back.
         
 * **2014-05-07:** 
-          The researcher communicated to PicsArt about having inspected the updated app and that although the communication was HTTPS, certificate validation was missing. Furthermore, Programa de Seguridad en TICcommunicated the vendor that the improper validation of the login process was still an issue. The vendor was informed about  a tentative date for May 21st set for publishing the advisory.
+          The researcher communicated to PicsArt about having inspected the updated app and that although the communication was HTTPS, certificate validation was missing. Furthermore, Programa de Seguridad en TIC communicated the vendor that the improper validation of the login process was still an issue. The vendor was informed about  a tentative date for May 21st set for publishing the advisory.
         
 * **2014-06-05:** 
-          After receiving no response, Programa de Seguridad en TICasked for PicsArt about plans to fixing the issues discussed.
+          After receiving no response, Programa de Seguridad en TIC asked for PicsArt about plans to fixing the issues discussed.
         
 * **2014-06-05:** 
           PicsArt notified that they were releasing a version into beta with fixed security and other features but with no explanation as to what was being fixed.
       
-* **2014-09-11:** Programa de Seguridad en TICadded the Computer Emergency Response Team to the conversation since they had also identified and notified PicsArt of the SSL certificate validation bug as part of their CERT TAPIOCA project [5]. 
+* **2014-09-11:** Programa de Seguridad en TIC added the Computer Emergency Response Team to the conversation since they had also identified and notified PicsArt of the SSL certificate validation bug as part of their CERT TAPIOCA project [5]. 
       
 * **2014-09-11:** 
          Vendor assured that a new release (4.6.3) was being deployed where the user key was not being transmitted over HTTP in version and that they were testing new bug fixes.
       
-* **2014-09-16:** Programa de Seguridad en TICasked for an estimated release of the application and informed to the vendor that the application was using an external library to implement their client side API transport ([6]) and this was one of the sources for the problem of not validating the certificates properly since they were explicitly calling library methods for skipping the validation process. 
+* **2014-09-16:** Programa de Seguridad en TIC asked for an estimated release of the application and informed to the vendor that the application was using an external library to implement their client side API transport ([6]) and this was one of the sources for the problem of not validating the certificates properly since they were explicitly calling library methods for skipping the validation process. 
       
 * **2014-09-17:** 
          Vendor sent the researcher a new beta version where the external library wasn't instructed to avoid validating certificates.
       
-* **2014-09-18:** Programa de Seguridad en TICotified that the server validation and the HTTPS vulnerabilities were still unfixed. The latter was because the application was still defining the default SSLSocketFactory and HostnameVerifier in an insecure way. Researcher pointed the vendor to the class originating this definitions.
+* **2014-09-18:** Programa de Seguridad en TIC notified that the server validation and the HTTPS vulnerabilities were still unfixed. The latter was because the application was still defining the default SSLSocketFactory and HostnameVerifier in an insecure way. Researcher pointed the vendor to the class originating this definitions.
       
 * **2014-11-06:** 
          Advisory was released.
