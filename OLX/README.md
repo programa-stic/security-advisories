@@ -67,11 +67,11 @@ Android devices running OLX communicate to the OLX server using HTTP. Therefore,
 
 ## 4. Vulnerable packages
 
-* OLX Android version 4.11.1 and below.
+* OLX Android version 4.34.2 and below.
 
 ## 5. Vendor Information, Solutions and Workarounds
 
-Vendor fixed Login bypass using old API when it disabled Login with Facebook for the previous app version. Last version (4.34.2) as of 26 of November of 2015 remains vulnerable to login bypass because of deterministic sessions and continues to use HTTP to communicate with OLX server allowing an attacker to capture sensitive information.
+Vendor fixed Login bypass using old API when it disabled Login with Facebook for the previous app version. Last version (4.34.2) as of 26 of November of 2015 remains vulnerable to login bypass because of deterministic sessions and insecure login procedure as well as continues to use HTTP to communicate with OLX server allowing an attacker to capture sensitive information.
 
 
 ## 6. Credits
