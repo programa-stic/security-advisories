@@ -36,7 +36,7 @@
 
 ## 3. Vulnerability Description
 
-OLX operates local online classifieds marketplaces accessible through the internet and through native apps on smartphones. As of November 2014, their Android application had between 10 to 50 million installation worldwide [1].
+OLX operates local online classifieds marketplaces accessible through the internet and through native apps on smartphones. As of November 2015, their Android application had between 50 to 100 million installation worldwide [1].
  
 OLX Android application has had two major different versions, each one has their own API used to communicate with the OLX servers. Both of these application versions and their corresponding APIs are currently working and have multiple vulnerabilities that would allow an attacker compromise remotely and locally users accounts.   
 
@@ -67,11 +67,11 @@ Android devices running OLX communicate to the OLX server using HTTP. Therefore,
 
 ## 4. Vulnerable packages
 
-* OLX Android version 4.34.2 and below.
+* OLX Android version 4.35.2 and below.
 
 ## 5. Vendor Information, Solutions and Workarounds
 
-Vendor fixed Login bypass using old API when it disabled Login with Facebook for the previous app version. Last version (4.34.2) as of 26 of November of 2015 remains vulnerable to login bypass because of deterministic sessions and insecure login procedure. It also continues to use HTTP to communicate with OLX server allowing an attacker to capture sensitive information.
+Vendor fixed Login bypass using old API when it disabled Login with Facebook for the previous app version. Last version (4.35.2) as of 30 of November of 2015 remains vulnerable to login bypass because of deterministic sessions and insecure login procedure. It also continues to use HTTP to communicate with OLX server allowing an attacker to capture sensitive information and hijack sessions.
 
 
 ## 6. Credits
@@ -143,11 +143,11 @@ if __name__ == '__main__':
 
 ## 7.3. Insecure login procedure in OLX newer API
  
-In newer versions of the application, authentication consist in first requesting a challenge to _api-v2.olx.com/users/challenge_ with the username as a parameter. Once the challenge is obtained, then the application performs a SHA1 hash over the concatenation of the MD5 hash of the password with the username (i.e SHA1(MD5(password)+username or email) ). Then both the challenge and the SHA1 hash are sent to the server as URL parameters (_c_ and _h_ respectively) to _api-v2.olx.com/users/login_ so the application can then obtain a session key.
+In newer versions of the application, authentication consist in first requesting a challenge to _api-v2.olx.com/users/challenge_ with the username as a parameter. Once the challenge is obtained, then the application performs a SHA512 hash over the concatenation of the MD5 hash of the password with the username (i.e SHA512(MD5(password)+username or email) ). Then both the challenge and the SHA512 hash are sent to the server as URL parameters (_c_ and _h_ respectively) to _api-v2.olx.com/users/login_ so the application can then obtain a session key. 
 
 There are several problems with this authentication procedure. The server challenge is predictable since it's a base64 encode of the username (encoded using Ceasar Cipher), the user ID and a timestamp. It can then be spoofed by an attacker. 
 
-Also, the challenge is not being used by the SHA1 hash to modify the application response so if an attacker can capture the hash, he can then reuse it to log in by requesting the challenge and then providing the captured hash and requested challenge. An interesting note is that the challenge is probably predictable and includes the user ID because the server needs a way to know who's the hash from so it (without saving any state) so it can then recalculate the hash with the username and password to match it to the user's provided one. 
+Also, the challenge is not being used by the SHA512 hash to modify the application response so if an attacker can capture the hash, he can then reuse it to log in by requesting the challenge and then providing the captured hash and requested challenge. An interesting note is that the challenge is probably predictable and includes the user ID because the server needs a way to know who's the hash from so it (without saving any state) so it can then recalculate the hash with the username and password to match it to the user's provided one. 
 
 Finally, the session key obtained from the server by the authentication mechanism is actually a base64 encoding of the user ID with a timestamp. This predictable session key allows an attacker to skip the login procedure by generating a valid session key by simply requesting a challenge to the server for the victim account, then decoding it as a base64, deleting the user name and the first delimiter ('|') and then encoding it again.
 
