@@ -71,7 +71,7 @@ Android devices running OLX communicate to the OLX server using HTTP. Therefore,
 
 ## 5. Vendor Information, Solutions and Workarounds
 
-Vendor fixed Login bypass using old API when it disabled Login with Facebook for the previous app version. Last version (4.35.2) as of 30 of November of 2015 remains vulnerable to login bypass because of deterministic sessions and insecure login procedure. It also continues to use HTTP to communicate with OLX server allowing an attacker to capture sensitive information and hijack sessions.
+Vendor fixed Login bypass for all accounts was fixed when the old API Login with Facebook feature was disabled. Last version (4.35.2) as of 30 of November of 2015 remains vulnerable to login bypass because of deterministic sessions and insecure login procedure. Also, application is still vulnerable to Login bypass for users that used Login with Facebook and continues to use HTTP to communicate with OLX server allowing an attacker to capture sensitive information and hijack sessions.
 
 
 ## 6. Credits
@@ -175,7 +175,9 @@ And in the second API version the user session key could be captured from any of
         
 * **2014-07-14:** 
            The vendor acknowledged the vulnerability and assured that the problem was being addressed.
-        
+
+* **2015-11-30:** 
+         Version 4.35.2 was released but vulnerabilities mentioned in sections 7.1, 7.3 and 7.4 weren't resolved. 
 * **2015-11-30:** 
          Advisory was released. 
 
