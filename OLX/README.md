@@ -165,9 +165,9 @@ And in the second API version the user session key could be captured from any of
 
 ## 8. Report Timeline
 
-* **2015-06-14:** Programa Seguridad en TIC Requested for a security contact.
+* **2014-06-14:** Programa Seguridad en TIC Requested for a security contact.
         
-* **2015-06-14:** 
+* **2014-06-14:** 
          OLX provided with contact information.
         
 * **2014-07-11:** 
