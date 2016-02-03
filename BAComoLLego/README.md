@@ -8,7 +8,7 @@
 
 **Reporte ID:** STIC-2015-0126
 
-**Reporte URL:** [http://www.fundacionsadosky.org.ar/publicaciones-2](http://www.fundacionsadosky.org.ar/publicaciones-2)
+**Reporte URL:** [http://www.fundacionsadosky.org.ar/publicaciones/#seguridad-en-tic](http://www.fundacionsadosky.org.ar/publicaciones/#seguridad-en-tic)
 
 **Fecha de publicación:** 2015-03-1
 

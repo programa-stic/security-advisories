@@ -8,7 +8,7 @@
 
 **Advisory ID:** STIC-2014-0529
 
-**Advisory URL:** [http://www.fundacionsadosky.org.ar/publicaciones-2](http://www.fundacionsadosky.org.ar/publicaciones-2)
+**Advisory URL:** [http://www.fundacionsadosky.org.ar/publicaciones/#seguridad-en-tic](http://www.fundacionsadosky.org.ar/publicaciones/#seguridad-en-tic)
 
 **Date published:** 2014-07-28
 
