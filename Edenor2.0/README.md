@@ -21,7 +21,7 @@
 
 ## 2. Información de vulnerabilidades
 
-**Clase:** [Inyección de código](http://cwe.mitre.org/data/definitions/94.html), [Implementación de mecanismo de seguridad del servidor en el cliente](http://cwe.mitre.org/data/definitions/602.html)], [Validación errónea de datos de entrada](http://cwe.mitre.org/data/definitions/20.html)], [Mecanismo de autorización ausente](http://cwe.mitre.org/data/definitions/862.html)
+**Clase:** [Inyección de código](http://cwe.mitre.org/data/definitions/94.html), [Implementación de mecanismo de seguridad del servidor en el cliente](http://cwe.mitre.org/data/definitions/602.html), [Validación errónea de datos de entrada](http://cwe.mitre.org/data/definitions/20.html), [Mecanismo de autorización ausente](http://cwe.mitre.org/data/definitions/862.html)
 
 **Impacto:** Ejecución de código, Perdida de datos
 
@@ -68,7 +68,7 @@ El framework exporta la funcionalidad nativa de los dispositivos móviles a tecn
    
 El problema del uso de Webviews en aplicaciones móviles es que, para aumentar su usabilidad, frecuentemente se debilitan las protecciones que proveen aislamiento entre contenidos descargados de distintos dominios (Same Origin Policy) y entre dominios y el sistema operativo (sandbox), permitiendo que un script corriendo en el Webview interactúe directamente con componentes nativos del sistema.
   
-El framework Apache Cordova permite que código Javascript en el Webview ejecute código Java nativo para acceder a diversas funcionalidades del dispositivo móvil como la cámara, el acelerómetro, el GPS, la agenda de contactos, etc. La funcionalidad disponible se controla mediante un archivo de configuración en el que se puede habilitar explícitamente cada una o todas de forma general usando un "comodín" (`*`). En dispositivos con versiones anteriores a Android 4.4.4, la habilitación de cualquiera de la funcionalidades disponibles permite que Javascript malicioso inyectado a la aplicación desde una fuente externa ejecute código nativo a elección del atacante. 
+El framework Apache Cordova permite que código Javascript en el Webview ejecute código Java nativo para acceder a diversas funcionalidades del dispositivo móvil como la cámara, el acelerómetro, el GPS, la agenda de contactos, etc. La funcionalidad disponible se controla mediante un archivo de configuración en el que se puede habilitar explícitamente cada una o todas de forma general usando un "comodín" (`*). En dispositivos con versiones anteriores a Android 4.4.4, la habilitación de cualquiera de la funcionalidades disponibles permite que Javascript malicioso inyectado a la aplicación desde una fuente externa ejecute código nativo a elección del atacante. 
    
 Versiones de Edenor 2.0 anteriores a 2.1 utilizan una versión desactualizada de Apache Cordova lo que la hace susceptible a ataques que exploten vulnerabilidades ya conocidas, como CVE-2014-3500, CVE-2014-3501 y CVE-2014-3502 [5]. La primera permite a una aplicación maliciosa, sin ningçún permiso, enviar un Intent que cambie la página de inicia de Edenor 2.0 a una provista por el atacante. La configuración de Apache Cordova de Edenor 2.0 es insegura y permite cargar contenido desde cualquier dominio, con lo cual un atacante podría inyectar, desde la página de inicio redirigida, contenido Javascript de su elección para:
     
@@ -91,7 +91,7 @@ Se pueden realizar pedidos a las siguientes tablas: _Contacto_, _Notificaciones_
   
     GET https://ednmobile.azure-mobile.net/tables/Cuenta?$filter=(Acct_Id%20eq%20'1234')
 
-Modificando el filtro por la condición _(Acct_Id%20gt%20'0')_, el servidor responderá enviando todas las filas de la tabla _Cuenta_. Esto se debe a que el servidor no válida que los filtros generados recibidos de un cliente correspondan con la semántica esperada para la operación requerida. El mismo tipo de ataque funciona para otros pedidos al resto de las tablas mencionadas. 
+Modificando el filtro por la condición `(Acct_Id%20gt%20'0'), el servidor responderá enviando todas las filas de la tabla _Cuenta_. Esto se debe a que el servidor no valida que los filtros generados recibidos de un cliente correspondan con la semántica esperada para la operación requerida. El mismo tipo de ataque funciona para otros pedidos al resto de las tablas mencionadas. 
   
 Finalmente, si bien la aplicación requiere que los usuarios se autentiquen, la API REST carece de un mecanismo de autorización de pedidos del lado del servidor, por lo cual cualquier usuario auténticado puede realizar operacioenes sobre la cuenta de cualqueir otro usuario.
   
@@ -132,19 +132,19 @@ Finalmente, si bien la aplicación requiere que los usuarios se autentiquen, la 
           Edenor envia el reporte _RTA - Informe Fundacion Sadosky.docx_ solicitando comentarios a las correciones propuestas e indicando que estaría en condiciones de publicar la nueva versión a fin de Febrero.
         
 * **2015-02-01:** 
-          Programa STIC informa a Edenor que reprogarmó la publicación del reporte para el 1ro de marzo y envia comentarios al documento de propuesta de correciones recibido el 28 de enero. Manifiesta estar de acuerdo en la solución para los problemas de Apache Cordova, recomieda el uso de un mecanismo centralizado de autorización[8] e indica que la autorización po si solo noes sucifiente para resolver todos los problemas sino que es necesario, además, realizar validación sintáctica y semántica de los parámetros de los URLs.
+          Programa STIC informa a Edenor que reprogarmó la publicación del reporte para el 1ro de marzo y envia comentarios al documento de propuesta de correciones recibido el 28 de enero. Manifiesta estar de acuerdo en la solución para los problemas de Apache Cordova, recomieda el uso de un mecanismo centralizado de autorización [8] e indica que la autorización po si solo noes sucifiente para resolver todos los problemas sino que es necesario, además, realizar validación sintáctica y semántica de los parámetros de los URLs.
         
 * **2015-02-26:** 
-          Edenor informa que la recomendaciones de program, STIC impactaron en los tiempos para desarrollar una versión nueva de la app con los problemas corregidos y podrá disponer de ella para purebas internas en la semanda del 7 de marzo. Pregunta si el Programa STIC podrñá realizar purebas en paralelo.
+          Edenor informa que las recomendaciones del Programa STIC impactaron en los tiempos para desarrollar una versión nueva de la app con los problemas corregidos y podrá disponer de ella para purebas internas en la semanda del 7 de marzo. Pregunta si el Programa STIC podrñá realizar purebas en paralelo.
         
 * **2015-03-02:** 
-          Programa STIC responde que, en base a lo iunformado por Edenor, reprogrmó la publicación del reportar para el 9 de marzo y que no tendrá disponibilidad para verificar manualmente la correcta resolución de las vulnerabildades. Solicita un informe mas detallado par aentender de que forma se planea arreglarlas. 
+          Programa STIC responde que, en base a lo iunformado por Edenor, reprogramó la publicación del reporte para el 9 de marzo y que no tendrá disponibilidad para verificar manualmente la correcta resolución de las vulnerabildades. Solicita un informe mas detallado par aentender de que forma se planea arreglarlas. 
         
 * **2015-03-08:** 
           Edenor envia el documento _EDN200 - Seguridad - documento de arquitectura v1.0.docx_ en el que se describen los detalles y alcance de la solución a las vulnerabilidades reportadas. Indica que la nueva versión de la app estará disponible en Google Play en aproximadamente 10 días. 
         
 * **2015-03-10:** 
-          Programa STIC informa a Edenor que reprogarmó la publicación del reporte para el 18 de marza y que esa fecha es final. Idica que en el mejor de los caso podra realizar pruebas automatizadas del la app a partir del 16 de marzo.
+          Programa STIC informa a Edenor que reprogarmó la publicación del reporte para el 18 de marza y que esa fecha es final. Indica que en el mejor de los caso podra realizar pruebas automatizadas del la app a partir del 16 de marzo.
         
 * **2015-03-10:** 
           Edenor envia el APK de la nueva version de la app.
