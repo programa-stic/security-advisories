@@ -19,10 +19,9 @@
 **Modo de publicación:** Coordinado
 
 
-
 ## 2. Información de vulnerabilidades
 
-**Clase:** Inyección de código [[http://cwe.mitre.org/data/definitions/94.html](http://cwe.mitre.org/data/definitions/94.html)], Implementación de mecanismo de seguridad del servidor en el cliente [[http://cwe.mitre.org/data/definitions/602.html](http://cwe.mitre.org/data/definitions/602.html)], Validación errónea de datos de entrada [[http://cwe.mitre.org/data/definitions/20.html](http://cwe.mitre.org/data/definitions/20.html)], Mecanismo de autorización ausente [[http://cwe.mitre.org/data/definitions/862.html](http://cwe.mitre.org/data/definitions/862.html)]
+**Clase:** ∑ [[http://cwe.mitre.org/data/definitions/94.html](http://cwe.mitre.org/data/definitions/94.html) Inyección de código ], Implementación de mecanismo de seguridad del servidor en el cliente [[http://cwe.mitre.org/data/definitions/602.html](http://cwe.mitre.org/data/definitions/602.html)], Validación errónea de datos de entrada [[http://cwe.mitre.org/data/definitions/20.html](http://cwe.mitre.org/data/definitions/20.html)], Mecanismo de autorización ausente [[http://cwe.mitre.org/data/definitions/862.html](http://cwe.mitre.org/data/definitions/862.html)]
 
 **Impacto:** Ejecución de código, Perdida de datos
 
@@ -32,20 +31,19 @@
 
 **Identificador CVE:** N/A
 
-
-
 ## 3. Descripción de vulnerabilidad
 
-    Edenor 2.0 [1] es una aplicación para dispositivos móviles que permite a usuarios de Edenor[2], empresa de distribución eléctrica de Argentina, conocer los datos de la última factura, visualizarla e imprimirla. También permite ver online cualquier reclamo por falta de suministro, geolocalizar las oficinas comerciales y entidades de pago habilitadas, recibir notificaciones y avisos sobre cuentas predeterminadas y enviar a la empresa fotos del medidor del servicio eléctrico. A la fecha de publicación de este reporte, la aplicación tiene entre 50.000 y 100.000 instalaciones según estadísticas del mercado de apps Google Play.
+ Edenor 2.0 [1] es una aplicación para dispositivos móviles que permite a usuarios de Edenor[2], empresa de distribución eléctrica de Argentina, conocer los datos de la última factura, visualizarla e imprimirla. También permite ver online cualquier reclamo por falta de suministro, geolocalizar las oficinas comerciales y entidades de pago habilitadas, recibir notificaciones y avisos sobre cuentas predeterminadas y enviar a la empresa fotos del medidor del servicio eléctrico. A la fecha de publicación de este reporte, la aplicación tiene entre 50.000 y 100.000 instalaciones según estadísticas del mercado de apps Google Play.
     
-    Se descubrieron varias vulnerabilidades en la aplicación que permiten a potenciales atacantes:
+ Se descubrieron varias vulnerabilidades en la aplicación que permiten a potenciales atacantes:
     
 * Acceder localmente a todos los datos de la aplicación desde cualquier otra aplicación sin necesidad de permiso alguno
 * Ejecutar código con los permisos de la aplicación Edenor 2.0 en el dispositivo móvil
 * Obtener de los servidores de la aplicación todos los datos de todos los usuarios registrados de Edenor 2.0
 * Realizar cualquiera de las operaciones disponibles en la aplicación Edenor 2.0 en nombre de cualquier otro usuario registrado
-    Las acciones descriptas pueden realizarse utilizando una aplicación maliciosa en el mismo dispositivo móvil en el que esté instalada la aplicación de Edenor o simplemente modificando la aplicación Edenor 2.0.
-    
+  
+Las acciones descriptas pueden realizarse utilizando una aplicación maliciosa en el mismo dispositivo móvil en el que esté instalada la aplicación de Edenor o simplemente modificando la aplicación Edenor 2.0.
+   
 
 ## 4. Paquetes vulnerables
 
@@ -53,9 +51,9 @@
 
 ## 5. Información y soluciones del fabricante
  
-     El 24 de enero de 2016 Edenor publicó en Google Play la versión 2.1 de la aplicación, corrigiendo algunas de las vulnerabilidades reportadas.
+El 24 de enero de 2016 Edenor publicó en Google Play la versión 2.1 de la aplicación, corrigiendo algunas de las vulnerabilidades reportadas.
     
-      El 22 de marzo de 2016 Edenor publicó la version 2.2 de la aplicación. La empresa indicó que la última versión corrige la totalidad de los problemas reportados. 
+El 22 de marzo de 2016 Edenor publicó la version 2.2 de la aplicación. La empresa indicó que la última versión corrige la totalidad de los problemas reportados. 
     
 
 ## 6. Créditos
@@ -64,35 +62,37 @@ Las vulnerabilidades fueron descubiertas e investigadas por Joaquin Rinaudo. La 
 
 ## 7. Descripción técnica
  
-     Edenor 2.0 fué desarrollada usando Apache Cordova[4], un framework de código abierto, tambien conocido como Phonegap, que permite construir aplicaciones para dispositivos móviles usando la misma tecnología utilizada en aplicaciones web, evitando así utilizar herramientas de desarrollo del lenguaje nativo de cada plataforma móvil. 
+ Edenor 2.0 fué desarrollada usando Apache Cordova[4], un framework de código abierto, tambien conocido como Phonegap, que permite construir aplicaciones para dispositivos móviles usando la misma tecnología utilizada en aplicaciones web, evitando así utilizar herramientas de desarrollo del lenguaje nativo de cada plataforma móvil. 
      
-    El framework exporta la funcionalidad nativa de los dispositivos móviles a tecnologías web como JavaScript, CSS y HTML5. Para ello, Apache Cordova instancia dentro de la aplicación móvil el inteprete de estos lenguajes de un navegador web con una vista gráfica customizada a la que nos referiremos como "Webview".
+ El framework exporta la funcionalidad nativa de los dispositivos móviles a tecnologías web como JavaScript, CSS y HTML5. Para ello, Apache Cordova instancia dentro de la aplicación móvil el inteprete de estos lenguajes de un navegador web con una vista gráfica customizada a la que nos referiremos como "Webview".
    
-    El problema del uso de Webviews en aplicaciones móviles es que, para aumentar su usabilidad, frecuentemente se debilitan las protecciones que proveen aislamiento entre contenidos descargados de distintos dominios (Same Origin Policy) y entre dominios y el sistema operativo (sandbox), permitiendo que un script corriendo en el Webview interactúe directamente con componentes nativos del sistema.
+ El problema del uso de Webviews en aplicaciones móviles es que, para aumentar su usabilidad, frecuentemente se debilitan las protecciones que proveen aislamiento entre contenidos descargados de distintos dominios (Same Origin Policy) y entre dominios y el sistema operativo (sandbox), permitiendo que un script corriendo en el Webview interactúe directamente con componentes nativos del sistema.
   
-    El framework Apache Cordova permite que código Javascript en el Webview ejecute código Java nativo para acceder a diversas funcionalidades del dispositivo móvil como la cámara, el acelerómetro, el GPS, la agenda de contactos, etc. La funcionalidad disponible se controla mediante un archivo de configuración en el que se puede habilitar explícitamente cada una o todas de forma general usando un "comodín" (_*_). En dispositivos con versiones anteriores a Android 4.4.4, la habilitación de cualquiera de la funcionalidades disponibles permite que Javascript malicioso inyectado a la aplicación desde una fuente externa ejecute código nativo a elección del atacante. 
+ El framework Apache Cordova permite que código Javascript en el Webview ejecute código Java nativo para acceder a diversas funcionalidades del dispositivo móvil como la cámara, el acelerómetro, el GPS, la agenda de contactos, etc. La funcionalidad disponible se controla mediante un archivo de configuración en el que se puede habilitar explícitamente cada una o todas de forma general usando un "comodín" (_*_). En dispositivos con versiones anteriores a Android 4.4.4, la habilitación de cualquiera de la funcionalidades disponibles permite que Javascript malicioso inyectado a la aplicación desde una fuente externa ejecute código nativo a elección del atacante. 
    
-    Versiones de Edenor 2.0 anteriores a 2.1 utilizan una versión desactualizada de Apache Cordova lo que la hace susceptible a ataques que exploten vulnerabilidades ya conocidas, como CVE-2014-3500, CVE-2014-3501 y CVE-2014-3502[5]. La primera permite a una aplicación maliciosa, sin ningçún permiso, enviar un Intent que cambie la página de inicia de Edenor 2.0 a una provista por el atacante. La configuración de Apache Cordova de Edenor 2.0 es insegura y permite cargar contenido desde cualquier dominio, con lo cual un atacante podría inyectar, desde la página de inicio redirigida, contenido Javascript de su elección para:
+ Versiones de Edenor 2.0 anteriores a 2.1 utilizan una versión desactualizada de Apache Cordova lo que la hace susceptible a ataques que exploten vulnerabilidades ya conocidas, como CVE-2014-3500, CVE-2014-3501 y CVE-2014-3502[5]. La primera permite a una aplicación maliciosa, sin ningçún permiso, enviar un Intent que cambie la página de inicia de Edenor 2.0 a una provista por el atacante. La configuración de Apache Cordova de Edenor 2.0 es insegura y permite cargar contenido desde cualquier dominio, con lo cual un atacante podría inyectar, desde la página de inicio redirigida, contenido Javascript de su elección para:
     
 
 * Exfiltrar datos usando la funcionalidad del framework disponible en Edenor 2.0 (cámara, geolocalización, acelerómetro, contactos, etc.)
 * Exfiltrar datos privados del almacenamiento local (cookies, credenciales, etc.).
 * Ejecutar código nativo en el intérprete Java o el intérprete de comandos del sistema operativo.
-   Por ejemplo, versiones anteriores a 2.1 de Edenor 2.0 utilizan la versión 2.9.0 de Apache Cordova, que es vulnerable a CVE-2014-3500 [5] permitiendole a otras aplicaciones cambiar la página de inicio por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. Un configuración correcta del framework podría bloquear dicho ataque si en el archivo de configuración _res/xml/config.xml_. se restringen los dominios a los que la aplicación se puede conectar. Sin embargo, la configuración usada permite a la aplicación acceder a cualquier dominio dado a que se utiliza un "comodín" (_*_) para especificar los dominios permitidos.
+
+ Por ejemplo, versiones anteriores a 2.1 de Edenor 2.0 utilizan la versión 2.9.0 de Apache Cordova, que es vulnerable a CVE-2014-3500 [5] permitiendole a otras aplicaciones cambiar la página de inicio por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. Un configuración correcta del framework podría bloquear dicho ataque si en el archivo de configuración _res/xml/config.xml_. se restringen los dominios a los que la aplicación se puede conectar. Sin embargo, la configuración usada permite a la aplicación acceder a cualquier dominio dado a que se utiliza un "comodín" (_*_) para especificar los dominios permitidos.
     
-   Dentro de este archivo de configuración también se encuentran listados los plugins que se pueden utilizar desde la aplicación. Muchos de de ellos no son necesarios para su funcionamiento. Por ejemplo, _Media_ permite reproducir y grabar audio desde Javascript.  _ContactManager_ permite el manejo de los contactos del dispositivo y _Capture_ permite capturar fotos y videos. Además de incluir estos plugins, la aplicación necesita pedir los permisos necesarios de Android para poder utilizar estos recursos. Dado los permisos que pide la aplicación, algunos de los plugins no pueden ser utilizados realmente e intentar hacerlo terminaría con execepciones de seguridad debido por falta de permisos, p.e en el caso del _ContactManager_. De lo anterior, se puede concluir que se optó por utilizar una configuración completamente permisiva de plugins, solo restringida por los permisos a nivel Android requeridos por la aplicación.
+ Dentro de este archivo de configuración también se encuentran listados los plugins que se pueden utilizar desde la aplicación. Muchos de de ellos no son necesarios para su funcionamiento. Por ejemplo, _Media_ permite reproducir y grabar audio desde Javascript.  _ContactManager_ permite el manejo de los contactos del dispositivo y _Capture_ permite capturar fotos y videos. Además de incluir estos plugins, la aplicación necesita pedir los permisos necesarios de Android para poder utilizar estos recursos. Dado los permisos que pide la aplicación, algunos de los plugins no pueden ser utilizados realmente e intentar hacerlo terminaría con execepciones de seguridad debido por falta de permisos, p.e en el caso del _ContactManager_. De lo anterior, se puede concluir que se optó por utilizar una configuración completamente permisiva de plugins, solo restringida por los permisos a nivel Android requeridos por la aplicación.
    
-   La aplicación aloja los datos de todos sus usuarios en Azure, la plataforma de servicios en la nube de Microsoft[6], y utiliza Azure Mobile Services para almacenarlos y accederlos. El componente utilizado genera las consultas a la base de datos usando una API REST donde la operación de acceso se indica con el verbo HTTP y los filtros correspondientes se pasan como parámetro del URL. Dado que el servidor no valida la semántica de los filtros recibidos, es posible modificarlos en el cliente para ejecutar cualquier consulta arbitraria a la base de datos.
+ La aplicación aloja los datos de todos sus usuarios en Azure, la plataforma de servicios en la nube de Microsoft[6], y utiliza Azure Mobile Services para almacenarlos y accederlos. El componente utilizado genera las consultas a la base de datos usando una API REST donde la operación de acceso se indica con el verbo HTTP y los filtros correspondientes se pasan como parámetro del URL. Dado que el servidor no valida la semántica de los filtros recibidos, es posible modificarlos en el cliente para ejecutar cualquier consulta arbitraria a la base de datos.
   
-   Esto permite a un usuario autenticado obtener información acerca de lectura de medidores, datos de otros usuarios (incluyendo nombres, teléfonos, email, dirección, número de cuenta asociado), notificaciones enviadas de la aplicación, etc. Los pedidos autenticados a la infraestructura de Azure tienen la siguiente sintaxis:
+ Esto permite a un usuario autenticado obtener información acerca de lectura de medidores, datos de otros usuarios (incluyendo nombres, teléfonos, email, dirección, número de cuenta asociado), notificaciones enviadas de la aplicación, etc. Los pedidos autenticados a la infraestructura de Azure tienen la siguiente sintaxis:
   _ GET https://ednmobile.azure-mobile.net/tables/table_name?filtro_. 
   
-   Se pueden realizar pedidos a las siguientes tablas: _Contacto_, _Notificaciones_mobile_, _Lectura_Medidor_, _Contacto_Dispositivo_Cuenta_, _Cuenta_. Los pedidos generados por la aplicación agregan a las consultas filtros de acuerdo al input del usuario. Por ejemplo, si un usuario quiere asociar la cuenta de Edenor número 1234 con su usuario, se hará un pedido al servidor como el siguiente para validar dicha cuenta:
+ Se pueden realizar pedidos a las siguientes tablas: _Contacto_, _Notificaciones_mobile_, _Lectura_Medidor_, _Contacto_Dispositivo_Cuenta_, _Cuenta_. Los pedidos generados por la aplicación agregan a las consultas filtros de acuerdo al input del usuario. Por ejemplo, si un usuario quiere asociar la cuenta de Edenor número 1234 con su usuario, se hará un pedido al servidor como el siguiente para validar dicha cuenta:
   
 _ GET https://ednmobile.azure-mobile.net/tables/Cuenta?$filter=(Acct_Id%20eq%20'1234')_
-   Modificando el filtro por la condición _(Acct_Id%20gt%20'0')_, el servidor responderá enviando todas las filas de la tabla _Cuenta_. Esto se debe a que el servidor no válida que los filtros generados recibidos de un cliente correspondan con la semántica esperada para la operación requerida. El mismo tipo de ataque funciona para otros pedidos al resto de las tablas mencionadas. 
+
+ Modificando el filtro por la condición _(Acct_Id%20gt%20'0')_, el servidor responderá enviando todas las filas de la tabla _Cuenta_. Esto se debe a que el servidor no válida que los filtros generados recibidos de un cliente correspondan con la semántica esperada para la operación requerida. El mismo tipo de ataque funciona para otros pedidos al resto de las tablas mencionadas. 
   
-   Finalmente, si bien la aplicación requiere que los usuarios se autentiquen, la API REST carece de un mecanismo de autorización de pedidos del lado del servidor, por lo cual cualquier usuario auténticado puede realizar operacioenes sobre la cuenta de cualqueir otro usuario.
+ Finalmente, si bien la aplicación requiere que los usuarios se autentiquen, la API REST carece de un mecanismo de autorización de pedidos del lado del servidor, por lo cual cualquier usuario auténticado puede realizar operacioenes sobre la cuenta de cualqueir otro usuario.
   
 
 ## 8. Cronología del reporte
@@ -155,7 +155,7 @@ _ GET https://ednmobile.azure-mobile.net/tables/Cuenta?$filter=(Acct_Id%20eq%20'
 ## 9. Referencias
 
 [1] Google Play
-      [https://play.google.com/store/apps/details?id=com.edenor.mobile.android](https://play.google.com/store/apps/details?id=com.edenor.mobile.android)
+    [https://play.google.com/store/apps/details?id=com.edenor.mobile.android](https://play.google.com/store/apps/details?id=com.edenor.mobile.android)
 
 [2] Edenor
       [http://www.edenor.com.ar/cms/subsolapa7.html](http://www.edenor.com.ar/cms/subsolapa7.html)
