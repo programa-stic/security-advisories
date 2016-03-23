@@ -62,13 +62,13 @@ Las vulnerabilidades fueron descubiertas e investigadas por Joaquin Rinaudo. La 
 
 ## 7. Descripción técnica
  
-Edenor 2.0 fué desarrollada usando Apache Cordova[4], un framework de código abierto, tambien conocido como Phonegap, que permite construir aplicaciones para dispositivos móviles usando la misma tecnología utilizada en aplicaciones web, evitando así utilizar herramientas de desarrollo del lenguaje nativo de cada plataforma móvil. 
+Edenor 2.0 fué desarrollada usando Apache Cordova [4], un framework de código abierto, tambien conocido como Phonegap, que permite construir aplicaciones para dispositivos móviles usando la misma tecnología utilizada en aplicaciones web, evitando así utilizar herramientas de desarrollo del lenguaje nativo de cada plataforma móvil. 
      
 El framework exporta la funcionalidad nativa de los dispositivos móviles a tecnologías web como JavaScript, CSS y HTML5. Para ello, Apache Cordova instancia dentro de la aplicación móvil el inteprete de estos lenguajes de un navegador web con una vista gráfica customizada a la que nos referiremos como "Webview".
    
-El problema del uso de Webviews en aplicaciones móviles es que, para aumentar su usabilidad, frecuentemente se debilitan las protecciones que proveen aislamiento entre contenidos descargados de distintos dominios (Same Origin Policy) y entre dominios y el sistema operativo (sandbox), permitiendo que un script corriendo en el Webview interactúe directamente con componentes nativos del sistema.
+El problema del uso de Webviews en aplicaciones móviles es que, para aumentar su usabilidad, frecuentemente se debilitan las protecciones que proveen aislamiento entre contenidos descargados de distintos dominios (_Same Origin Policy_) y entre dominios y el sistema operativo (_sandbox_), permitiendo que un script corriendo en el Webview interactúe directamente con componentes nativos del sistema.
   
-El framework Apache Cordova permite que código Javascript en el Webview ejecute código Java nativo para acceder a diversas funcionalidades del dispositivo móvil como la cámara, el acelerómetro, el GPS, la agenda de contactos, etc. La funcionalidad disponible se controla mediante un archivo de configuración en el que se puede habilitar explícitamente cada una o todas de forma general usando un "comodín" (`*). En dispositivos con versiones anteriores a Android 4.4.4, la habilitación de cualquiera de la funcionalidades disponibles permite que Javascript malicioso inyectado a la aplicación desde una fuente externa ejecute código nativo a elección del atacante. 
+El framework Apache Cordova permite que código Javascript en el Webview ejecute código Java nativo para acceder a diversas funcionalidades del dispositivo móvil como la cámara, el acelerómetro, el GPS, la agenda de contactos, etc. La funcionalidad disponible se controla mediante un archivo de configuración en el que se puede habilitar explícitamente cada una o todas de forma general usando un "comodín" (`*`). En dispositivos con versiones anteriores a Android 4.4.4, la habilitación de cualquiera de la funcionalidades disponibles permite que Javascript malicioso inyectado a la aplicación desde una fuente externa ejecute código nativo a elección del atacante. 
    
 Versiones de Edenor 2.0 anteriores a 2.1 utilizan una versión desactualizada de Apache Cordova lo que la hace susceptible a ataques que exploten vulnerabilidades ya conocidas, como CVE-2014-3500, CVE-2014-3501 y CVE-2014-3502 [5]. La primera permite a una aplicación maliciosa, sin ningçún permiso, enviar un Intent que cambie la página de inicia de Edenor 2.0 a una provista por el atacante. La configuración de Apache Cordova de Edenor 2.0 es insegura y permite cargar contenido desde cualquier dominio, con lo cual un atacante podría inyectar, desde la página de inicio redirigida, contenido Javascript de su elección para:
     
@@ -178,7 +178,7 @@ Finalmente, si bien la aplicación requiere que los usuarios se autentiquen, la 
 [8] Service-side authorization of users in Mobile Services 
 [https://azure.microsoft.com/en-us/documentation/articles/mobile-services-javascript-backend-service-side-authorization/](https://azure.microsoft.com/en-us/documentation/articles/mobile-services-javascript-backend-service-side-authorization/)
 
-## 10. Acerca Fundación Dr. Manuel Sadosky
+## 10. Acerca de la Fundación Dr. Manuel Sadosky
 
 La Fundación Dr. Manuel Sadosky es una institución público privada cuyo objetivo es favorecer la articulación entre el sistema científico – tecnológico y la estructura productiva en todo lo referido a la temática de las Tecnologías de la Información y la Comunicación (TIC). Creada a través del Decreto Nro. 678/09 del Poder Ejecutivo Nacional, la Fundación es presidida por el ministro de Ciencia, Tecnología e Innovación Productiva. Sus vicepresidentes son los presidentes de las cámaras más importantes del sector TIC: CESSI (Cámara de Empresas de Software y Servicios Informáticos) y CICOMRA (Cámara de Informática y Comunicaciones de la República Argentina). Para más información visitar: [http://www.fundacionsadosky.org.ar](http://www.fundacionsadosky.org.ar)
 
