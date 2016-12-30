@@ -91,7 +91,7 @@ Se pueden realizar pedidos a las siguientes tablas: _Contacto_, _Notificaciones_
   
     GET https://ednmobile.azure-mobile.net/tables/Cuenta?$filter=(Acct_Id%20eq%20'1234')
 
-Modificando el filtro por la condición `(Acct_Id%20gt%20'0')`, el servidor responderá enviando todas las filas de la tabla _Cuenta_. Esto se debe a que el servidor no valida que los filtros generados recibidos de un cliente correspondan con la semántica esperada para la operación requerida. El mismo tipo de ataque funciona para otros pedidos al resto de las tablas mencionadas. 
+Modificando el filtro por la condición `(Acct_Id%20gt%20'0'), el servidor responderá enviando todas las filas de la tabla _Cuenta_. Esto se debe a que el servidor no valida que los filtros generados recibidos de un cliente correspondan con la semántica esperada para la operación requerida. El mismo tipo de ataque funciona para otros pedidos al resto de las tablas mencionadas. 
   
 Finalmente, si bien la aplicación requiere que los usuarios se autentiquen, la API REST carece de un mecanismo de autorización de pedidos del lado del servidor, por lo cual cualquier usuario auténticado puede realizar operacioenes sobre la cuenta de cualqueir otro usuario.
   
