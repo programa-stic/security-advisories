@@ -1,5 +1,5 @@
 # Boletines de Seguridad del Programa de Seguridad en TIC de la Fundación Dr. Manuel Sadosky #
-[english version](https://github.com/programa-stic/security-advisories/README-en.md)
+[english version](https://github.com/programa-stic/security-advisories/blob/master/README-en.md)
 
 Este repositorio contiene todos los boletines de seguridad publicados por el Programa STIC de la Fundación Dr. Manuel Sadosky de Argentina.
 Cada boletín de seguridad contiene una descripción general y detalles técnicos de vulnerabilidades descubiertas por investigadores del Programa STIC en  
