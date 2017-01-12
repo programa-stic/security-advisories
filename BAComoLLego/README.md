@@ -10,7 +10,7 @@
 
 **Reporte URL:** [http://www.fundacionsadosky.org.ar/publicaciones-2](http://www.fundacionsadosky.org.ar/publicaciones-2)
 
-**Fecha de publicación:** 2015-3-1
+**Fecha de publicación:** 2015-03-01
 
 **Fecha de última actualización:** 2017-01-12
 
@@ -36,7 +36,7 @@
 
 ## 3. Descripción de vulnerabilidad
 
-    La aplicación BA Como LLego [1] para Android permite consultar cómo viajar en colectivo, tren, súbte, bicicleta, auto y a pie en la Ciudad de Buenos Aires, fue desarrollada por el Gobierno de la Ciudad de Buenos Aires y, a febrero de 2015, cuenta con entre 500 mil y un millón de instalaciones según datos del mercado de aplicaciones Google Play.
+    La aplicación BA Como LLego [1] para Android permite consultar cómo viajar en colectivo, tren, súbte, bicicleta, auto y a pie en la Ciudad de Buenos Aires, fue desarrollada por el Gobierno de la Ciudad de Buenos Aires y, a enero de 2017, cuenta con entre 1 y 5 millones de instalaciones según datos del mercado de aplicaciones Google Play.
     
     La aplicación fue desarrollada usando Apache Cordova [2] (conocido también como PhoneGap), un framework de código abierto que permite construir aplicaciones para dispositivos móviles a partir de tecnología web standard. El framewok embebe en la aplicación móvil un motor de navegador web (conocido como WebView) adaptado a las características del dispositivo, para que el usuario pueda visualizar el contenido de una aplicación web. Este mecanismo permite a un desarrollador incorporar a dispositivos móviles, rápidamente y con poco esfuerzo de adaptación, aplicaciones web ya existentes o desarrolladas para otras plataformas. 
      
@@ -49,11 +49,12 @@
 
 ## 4. Paquetes vulnerables
 
-* Aplicación BA Como LLego para Android versiones 4.0.1 o <= 1.0
+* Aplicación BA Como LLego para Android versiones 4.1.0 y 1.0
 
 ## 5. Información y soluciones del fabricante
  
      El fabricante actualizó la aplicación el 2 de noviembre de 2015 y la versión 4.0.1 soluciona los problemas mencionados.
+     Sin embargo, la versión 4.1.0 publicada el 22 de diciembre de 2016 reintrodujo las vulnerabilidades
     
 
 ## 6. Créditos
@@ -104,7 +105,7 @@ var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, { tim
 
 ```
 
-   BA ComoLLego utiliza la versión de PhoneGap 2.3.0 que es vulnerable a CVE-2014-3500 [3] permitiendole a otras aplicaciones cambiar la página de inicio de la aplicación por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. 
+   BA ComoLLego versión 1 utiliza la versión de PhoneGap 2.3.0 que es vulnerable a CVE-2014-3500 [3] permitiendole a otras aplicaciones cambiar la página de inicio de la aplicación por una con contenido malicioso a través de un Intent que lleve un parámetro extra con referencia al contenido bajo la clave _url_. 
     
    La correcta configuración del framework podría llegar a bloquear dicho ataque cuando se restringen los dominios a los cuales la aplicación se puede conectar a través del archivo de configuración _res/xml/config.xml_. Sin embargo, BA ComoLlego permite a la aplicación acceder a cualquier dominio dado a que para filtrar los accesos utiliza un comodín.
     
