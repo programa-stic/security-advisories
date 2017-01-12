@@ -12,7 +12,7 @@
 
 **Fecha de publicación:** 2015-03-1
 
-**Fecha de última actualización:** 2015-1-26
+**Fecha de última actualización:** 2017-01-12
 
 **Fabricantes contactados:** Gobierno de la Ciudad de Buenos Aires
 
@@ -49,7 +49,7 @@ La configuración utilizada de PhoneGap es también insegura. Permite a la aplic
 
 ## 4. Paquetes vulnerables
 
-* Dispositivos corriendo la versión 1 o versiones anteriores.
+* Dispositivos corriendo la versión 4.1.0  o versiones anteriores.
 
 ## 5. Información y soluciones del fabricante
  
@@ -144,6 +144,12 @@ Como prueba de concepto que la aplicación es vulnerable a CVE-2014-3500 se pued
         
 * **2015-11-26:** 
           Se publica el reporte de seguridad.
+
+* **2016-12-22:** 
+          Se publica la version 4.1.0 de la aplicación en Google Play
+
+* **2017-01-11:** 
+          Se verifica que la vulnerabildad no fue corregida
         
 
 ## 9. Referencias
