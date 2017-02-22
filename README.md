@@ -6,7 +6,7 @@ Cada boletín de seguridad contiene una descripción general y detalles técnico
 software de uso masivo en el ámbito nacional y/o con despligue significativo a nivel global.
 
 El procedimiento seguido por el Programa STIC para el reporte y publicación de estos boletines se describe detalladamente en el documento
-[Procedimiento de Reporte y Difusión de Vulnerabilidades](https://github.com/progrma-stic/security-advisories/es/STIC_vulndisc_procedure-es.md)
+[Procedimiento de Reporte y Difusión de Vulnerabilidades](https://github.com/programa-stic/security-advisories/blob/master/es/STIC_vulndisc_procedure-es.md)
 
 
 ### Contacto ###
